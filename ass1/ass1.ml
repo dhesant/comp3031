@@ -37,3 +37,16 @@ fun search ((v1,v2), G (v) ) = let val x = get_edges(v1, G (v))
 				   end
 			       end;
 				   
+(* Question 3 *)
+fun count_edges (G []) = 0
+  | count_edges (G (V(i,v)::tail)) = let val x = get_edges(i, G (V(i,v)::nil))
+				    in
+					let fun check ([]) = 0
+					      | check ((x,y)::tail) =
+						if (x < y)
+						then 1 + check(tail)
+						else check(tail);
+					in check(x) + count_edges(G(tail))
+					end
+				    end;
+					
