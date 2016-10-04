@@ -9,13 +9,6 @@ datatype graph = G of adj list;
 (* Show full nested data *)
 Control.Print.printDepth := 100;
 
-(* Testing Variables *)
-val n = G [];
-val p = G [V(0, [1]), V(1, [0])];
-val q = G [V(0, [1]), V(1, [0]), V(2, [])];
-val r = G [V (0,[1,2,3]),V (1,[0,2]),V (2,[0,1]),V (3,[0])];
-
-
 (* Question 1 *)
 fun get_edges (x, G []) = [] 
   | get_edges (x, G ( V(i,[])::tail)) = if (i = x)
@@ -50,3 +43,27 @@ fun count_edges (G []) = 0
 					end
 				    end;
 					
+(* Question 4 *)
+fun get_max_length (G []) = 0
+  | get_max_length (G (V(i,v)::nil)) = length(v)
+  | get_max_length (G (V(i,v)::V(j,w)::tail)) =  if (length(v) > length(w))
+					   then
+					       get_max_length(G (V(i,v)::tail))
+					   else
+					       get_max_length(G (V(j,w)::tail));
+
+
+fun find_max (G []) = [] 
+  | find_max (G v) = let val len = get_max_length(G v)
+				  in
+				      let fun find_max_helper (len, G []) = []
+					    | find_max_helper (len, G (V(i,v)::tail)) =
+					    if (length(v) = len)
+					    then i::find_max_helper(len, G (tail))
+					    else find_max_helper(len, G (tail));
+				      in find_max_helper(len, G v)
+				      end
+				  end;
+								   
+								    
+
