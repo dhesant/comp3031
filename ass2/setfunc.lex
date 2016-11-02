@@ -20,12 +20,9 @@ number 0|([1-9]+{digits}*)
 op [-]
 lb [(]
 rb [)]
-
 num {ws}*{number}{ws}*
-
-incre {num}[-]{num}
-vec {num}[,]{vec} | {incre}[,]{vec} | {num} | {incre}
-set {ws}*[{]{vec}[}]{ws}* | {ws}*[{]{ws}*[}]{ws}*
+sethelper [,-]{num}
+set {ws}*[{]{num}{sethelper}*[}]{ws}*
 
 /* End: add your definitions here */
 
@@ -34,10 +31,9 @@ set {ws}*[{]{vec}[}]{ws}* | {ws}*[{]{ws}*[}]{ws}*
 {op}|\n return *yytext;
 {lb}	return LB;
 {rb}	return RB;
-{num}   {RmWs(yytext); yylval = (char*)malloc(sizeof(char)*MAXL); strcpy(yylval,yytext); return NUM;}
-{set}   {RmWs(yytext); yylval = (char*)malloc(sizeof(char)*MAXL); strcpy(yylval,yytext); return SET;}
-"&"     return INTERSECT;
-"|"     return UNION;
+{set}   {RmWs(yytext); yylval = (char*)malloc(sizeof(char)*MAXL); strcpy(yylval,yytext); return SET;};
+[&]      return INTERSECT;
+[|]      return UNION;
 "MAX"   return MAX;
 "MIN"   return MIN;
 {ws}
@@ -55,4 +51,3 @@ void RmWs(char* str){
   }
  str[j]='\0';
 }
-

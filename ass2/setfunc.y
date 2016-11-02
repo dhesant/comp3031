@@ -40,22 +40,22 @@ line: 	'\n'
         | expr '\n' {printf("res %s\n",$1);OutputRes($1);}
 	;
 // start of your grammar rules and actions
-expr : expr '-' expr2        {$$ = MinusSet($1, $3);}
-     | expr2                 {$$ = $1;}
+expr : expr '-' expr2        {printf("1: %s-%s\n",$1,$3);$$ = MinusSet($1, $3);}
+     | expr2                 {printf("1: %s\n",$1);$$ = $1;}
      ;
 
-expr2: expr2 INTERSECT expr3 {$$ = IntersectSet($1, $3);}
-     | expr2 UNION expr3     {$$ = UnionSet($1, $3);}
-     | expr3                 {$$ = $1;}
+expr2: expr2 INTERSECT expr3 {printf("2: %s&%s\n",$1,$3);$$ = IntersectSet($1, $3);}
+     | expr2 UNION expr3     {printf("2: %s|%s\n",$1,$3);$$ = UnionSet($1, $3);}
+     | expr3                 {printf("2: %s\n",$1);$$ = $1;}
      ;
 
-expr3: MAX expr3             {$$ = Max($1);}
-     | MIN expr3	     {$$ = Min($1);}
-     | expr4		     {$$ = $1;}
+expr3: MAX expr3             {printf("3: MAX%s\n",$2);$$ = Max($2);}
+     | MIN expr3	     {printf("3: MIN%s\n",$2);$$ = Min($2);}
+     | expr4		     {printf("3: %s\n",$1);$$ = $1;}
      ;
 
-expr4: SET                   {$$ = FFormat($1);}	
-     | LB expr RB            {$$ = $2;}	
+expr4: SET                   {printf("4: %s\n",$1);$$ = FFormat($1);}	
+     | LB expr RB            {printf("4: %s\n",$2);$$ = $2;}	
      ;
 
 /* set  : '{' vec '}'           {$$ = Expand($0);} */
