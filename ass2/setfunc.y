@@ -40,6 +40,7 @@ line: 	'\n'
         | expr '\n' {printf("res %s\n",$1);OutputRes($1);}
 	;
 // start of your grammar rules and actions
+
 expr : expr '-' expr2        {printf("1: %s-%s\n",$1,$3);$$ = MinusSet($1, $3);}
      | expr2                 {printf("1: %s\n",$1);$$ = $1;}
      ;
@@ -57,19 +58,6 @@ expr3: MAX expr3             {printf("3: MAX%s\n",$2);$$ = Max($2);}
 expr4: SET                   {printf("4: %s\n",$1);$$ = FFormat($1);}	
      | LB expr RB            {printf("4: %s\n",$2);$$ = $2;}	
      ;
-
-/* set  : '{' vec '}'           {$$ = Expand($0);} */
-/*      | "{}"		     {$$ = "";} */
-/*      ; */
-
-/* vec  : NUM ',' vec           {$$ = $0;}	 */
-/*      | incre ',' vec	     {$$ = $0;}	 */
-/*      | NUM                   {$$ = $1;}	 */
-/*      | incre		     {$$ = $1;}	 */
-/*      ; */
-
-/* incre: NUM '-' NUM           {$$ = Expand($0);} */
-/*      ; */
 
 // end of your grammar rules and actions
 %%

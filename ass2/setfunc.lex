@@ -31,9 +31,9 @@ set {ws}*[{]{num}{sethelper}*[}]{ws}*
 {op}|\n return *yytext;
 {lb}	return LB;
 {rb}	return RB;
-{set}   {RmWs(yytext); yylval = (char*)malloc(sizeof(char)*MAXL); strcpy(yylval,yytext); return SET;};
-[&]      return INTERSECT;
-[|]      return UNION;
+{set}   {yylval = (char*)malloc(sizeof(char)*MAXL); strcpy(yylval,yytext); return SET;};
+[&]     return INTERSECT;
+[|]     return UNION;
 "MAX"   return MAX;
 "MIN"   return MIN;
 {ws}
