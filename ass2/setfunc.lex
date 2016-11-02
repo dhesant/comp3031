@@ -17,12 +17,15 @@ ws [ \t]+
 digits [0-9]
 number 0|([1-9]+{digits}*)
 /************* Start: add your definitions here */
+op [-]
+lb [(]
+rb [)]
 
+num {ws}*{number}{ws}*
 
-
-
-
-
+incre {num}[-]{num}
+vec {num}[,]{vec} | {incre}[,]{vec} | {num} | {incre}
+set {ws}*[{]{vec}[}]{ws}* | {ws}*[{]{ws}*[}]{ws}*
 
 /* End: add your definitions here */
 
@@ -31,9 +34,12 @@ number 0|([1-9]+{digits}*)
 {op}|\n return *yytext;
 {lb}	return LB;
 {rb}	return RB;
-/*         Start: add your rules here          */
-
-/*         End: add your rules here            */
+{num}   {RmWs(yytext); yylval = (char*)malloc(sizeof(char)*MAXL); strcpy(yylval,yytext); return NUM;}
+{set}   {RmWs(yytext); yylval = (char*)malloc(sizeof(char)*MAXL); strcpy(yylval,yytext); return SET;}
+"&"     return INTERSECT;
+"|"     return UNION;
+"MAX"   return MAX;
+"MIN"   return MIN;
 {ws}
 %%
 

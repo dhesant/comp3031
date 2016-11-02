@@ -40,7 +40,36 @@ line: 	'\n'
         | expr '\n' {printf("res %s\n",$1);OutputRes($1);}
 	;
 // start of your grammar rules and actions
+expr : expr '-' expr2        {$$ = MinusSet($1, $3);}
+     | expr2                 {$$ = $1;}
+     ;
 
+expr2: expr2 INTERSECT expr3 {$$ = IntersectSet($1, $3);}
+     | expr2 UNION expr3     {$$ = UnionSet($1, $3);}
+     | expr3                 {$$ = $1;}
+     ;
+
+expr3: MAX expr3             {$$ = Max($1);}
+     | MIN expr3	     {$$ = Min($1);}
+     | expr4		     {$$ = $1;}
+     ;
+
+expr4: SET                   {$$ = FFormat($1);}	
+     | LB expr RB            {$$ = $2;}	
+     ;
+
+/* set  : '{' vec '}'           {$$ = Expand($0);} */
+/*      | "{}"		     {$$ = "";} */
+/*      ; */
+
+/* vec  : NUM ',' vec           {$$ = $0;}	 */
+/*      | incre ',' vec	     {$$ = $0;}	 */
+/*      | NUM                   {$$ = $1;}	 */
+/*      | incre		     {$$ = $1;}	 */
+/*      ; */
+
+/* incre: NUM '-' NUM           {$$ = Expand($0);} */
+/*      ; */
 
 // end of your grammar rules and actions
 %%
