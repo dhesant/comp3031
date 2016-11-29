@@ -18,7 +18,28 @@ dotHelper([],[],Prev,X) :-
 	X = Prev.
 
 /* Problem 2 */
+enum(_,0,L) :-
+	L = [],
+	!.
 
+enum(X,N,L) :-
+	enumHelper(X,N,[],L).
+
+enumHelper(X,N,L,L3) :-
+	length(X,LengthX),
+	LengthX < N,
+	L3 = L,
+	!.
+
+enumHelper(X,N,L,L3) :-
+	length(X,LengthX),
+	LengthX >= N,
+	headN(X,N,SubL),
+	append(L,[SubL],NewL),
+	[_|T] = X,
+	enumHelper(T,N,NewL,L3).
+
+headN(Input,N,Output) :- findall(E, (nth1(I,Input,E), I =< N), Output).
 
 /* The database of adj facts */
 adj([a, [b,c,d]]).
@@ -46,10 +67,24 @@ vlistHelper(L, CurrentL, CurrentN, N) :-
 
 /* Problem 4 */
 degree(V, D) :-
+	nonvar(V),
+	adj([V, AdjV]),
+	length(AdjV, D),
+	!.
+
+degree(V, D) :-
 	adj([V, AdjV]),
 	length(AdjV, D).
 
 /* Problem 5 */
 edge(V1, V2) :-
+	nonvar(V1),
+	nonvar(V2),
+	adj([V1, AdjV1]),
+	member(V2, AdjV1),
+	!.
+
+edge(V1, V2) :-
 	adj([V1, AdjV1]),
 	member(V2, AdjV1).
+
