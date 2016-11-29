@@ -20,14 +20,29 @@ dotHelper([],[],Prev,X) :-
 /* Problem 2 */
 
 
-/* Problem 3 */
-
 /* The database of adj facts */
 adj([a, [b,c,d]]).
 adj([b, [d,e]]).
 adj([c, []]).
 adj([e, [a]]).
 adj([d, [b]]).
+
+/* Problem 3 */
+vlist(L,N) :-
+	vlistHelper(L, [], 0, N).
+
+vlistHelper(L, CurrentL, CurrentN, N) :-
+	CurrentN < N,
+	adj([V|_]),
+	\+ memberchk(V,CurrentL),
+	append(CurrentL, [V], NewL),
+	NewN is CurrentN + 1,
+	vlistHelper(L, NewL, NewN, N),
+	!.
+
+vlistHelper(L, CurrentL, CurrentN, N) :-
+	CurrentN =:= N,
+	L = CurrentL.
 
 /* Problem 4 */
 degree(V, D) :-
